@@ -52,6 +52,50 @@ def date_difference(d1, d2):
 def date_compare(d1, d2):
   return min(string_compare(d1,d2), date_difference(d1,d2))
 
+# try to figure out if a particular string is a date
+def is_date(s):
+  if len(s) < 10:
+    return False
+  for i in range(0, len(s)):
+    if i == 4 or i == 7:
+      if s[i] != '-':
+        return False
+    else:
+      if not s[i].isdigit():
+        return False
+  return True
+      
+ 
+
+def entry_compare(e1, e2):
+  if len(e2 < e1):
+    return entry_compare(e2, e1)
+
+  entry_sum = 0.0
+  # e1 < e2 is true
+  for etr in e1:
+    best = 1.0
+    for etr2 in e2:
+      # call right comparision function??
+      if etr.isdigit() and etr2.isdigit():
+        comp = int_compare(int(etr), int(etr2))
+        best = min(comp, best)
+      elif etr.isdigit() or etr2.isdigit():
+        continue
+      elif is_date(etr) and is_date(etr2):
+        comp = date_compare(etr, etr2)
+        best = min(comp, best)
+      elif is_date(etr) or is_date(etr2):
+        continue
+      else:
+        comp = string_compare(etr, etr2)
+        best = min(comp, best)
+    entry_sum += best
+  return entry_sum 
+   
+
+def compare(a,b):
+  return False
 
 
 #--------------QUERY CODE------------------------
@@ -121,9 +165,6 @@ def pairwise_cmp(subjects):
     for s2 in subjects:
       if compare(subjects[s1], subjects[s2]):
         print("Duplicate: %s and %s" % (s1, s2))
-
-def compare(a, b):
-  return False
 
 # Begin by retrieving all available predicates
 preds = all_predicates(dataset)
