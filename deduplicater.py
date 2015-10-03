@@ -22,6 +22,8 @@ def edit_distance(s1, s2):
   return tbl[i,j]
 
 def string_compare(s1, s2):
+  if len(s1) == 0 and len(s2) == 0:
+    return True
   return pow(edit_distance(s1,s2)/(len(s1) + len(s2)) + 0.0, 2)
 
 def percent_difference(i1, i2):
@@ -111,9 +113,6 @@ def compare(a,b):
     elif key in a or key in b:
       compsum += 1.0
       count += 1
-  print compsum / count
-  if compsum / count == 0:
-    print "ZERO"
   return compsum / count <= 0.05
 
 
@@ -189,11 +188,11 @@ def pairwise_cmp(subjects):
 
 # Begin by retrieving all available predicates
 preds = all_predicates(dataset)
-print('%d predicates found.' % len(preds))
+#print('%d predicates found.' % len(preds))
 
 for p in preds:
     pdata = all_data_for_pred(dataset, p)
-    print('Predicate %s: %d entries' % (p, len(pdata)))
+    #print('Predicate %s: %d entries' % (p, len(pdata)))
     max_bucket_size = sqrt(len(pdata))
     buckets = {}
 
@@ -207,12 +206,12 @@ for p in preds:
         buckets[h].append(subject)
 
     # Print out bucket metrics
-    print("%d buckets generated" % len(buckets.keys()))
+    #print("%d buckets generated" % len(buckets.keys()))
     usable = 0
     for i, val in enumerate(buckets):
         size = len(buckets[val])
         if(size > 1 and size < max_bucket_size):
-          print("  bucket %d: %d entries" % (i, size))
+          #print("  bucket %d: %d entries" % (i, size))
           bucket = all_data_for_subjects(dataset, buckets[val])
           pairwise_cmp(bucket)
 
