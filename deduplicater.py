@@ -100,6 +100,8 @@ def entry_compare(e1, e2):
 
 def compare(a,b):
   keys = set(a.keys() + b.keys())
+  if len(keys) == 0:
+    return False
   compsum = 0.0
   count = 0.0
   for key in keys:
