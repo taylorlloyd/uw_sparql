@@ -3,7 +3,7 @@ from math import sqrt
 
 sparql = SPARQLWrapper('http://husky-big.cs.uwaterloo.ca:8890/sparql')
 dataset = '<http://data.nytimes.com>'
-months = [31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366]
+months = [0,31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
 
 #-------------PAIRWISE COMPARISON---------------
 
@@ -112,6 +112,8 @@ def compare(a,b):
       compsum += 1.0
       count += 1
   print compsum / count
+  if compsum / count == 0:
+    print "ZERO"
   return compsum / count <= 0.05
 
 
