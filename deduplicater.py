@@ -13,6 +13,16 @@ def all_data(dataset):
   sparql.setReturnFormat(JSON)
   return sparql.query().convert()
 
+def all_data_for_pred(dataset, predicate):
+  sparql.setQuery("""
+    select ?s ?o
+    from %s
+    where {
+      ?s <%s> ?o
+    }""" % (dataset, predicate))
+  sparql.setReturnFormat(JSON)
+  return sparql.query().convert()
+
 def all_predicates(dataset):
   sparql.setQuery("""
     select distinct ?p
@@ -22,7 +32,6 @@ def all_predicates(dataset):
     }""" % dataset)
   sparql.setReturnFormat(JSON)
   return sparql.query().convert()
-
 
 # Begin by retrieving all available predicates
 data = all_predicates(dataset)
