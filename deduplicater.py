@@ -25,18 +25,22 @@ def string_compare(s1, s2):
   return pow(edit_distance(s1,s2)/(len(s1) + len(s2)), 2)
 
 def percent_difference(i1, i2):
+  i1 = abs(i1)
+  i2 = abs(i2)
+  if i1 + i2 == 0:
+    return 0
   return abs(2*(i1 - i2)/(i1 + i2))
 
 def int_compare(i1, i2):
   return min(percent_difference(i1,i2), string_compare(str(i1),str(i2)))
 
 def parse_date(d):
-  map(lambda n: int(n), d.split('-'))
+  return map(lambda n: int(n), d.split('-'))
 
 # PRECONDITION: d1, d2 given as strings in format 'yyyy-mm-dd'
-def date_difference(d1, d2):
-  y1, m1, d1 = parse_date(d1)
-  y2, m2, d2 = parse_date(d1)
+def date_difference(day1, day2):
+  y1, m1, d1 = parse_date(day1)
+  y2, m2, d2 = parse_date(day2)
  
   if(abs(y1-y2) > 1):
     return 1
@@ -100,9 +104,13 @@ def compare(a,b):
   count = 0.0
   for key in keys:
     if key in a and key in b:
-      compsum += entry_compare(a[key],b[key]) <= 0.05
+      compsum += entry_compare(a[key],b[key])
       count += 1
-  return compsum / count
+    elif key in a or key in b:
+      compsum += 1.0
+      count += 1
+  print compsum / count
+  return compsum / count <= 0.05
 
 
 
