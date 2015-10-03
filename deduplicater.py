@@ -16,13 +16,13 @@ def edit_distance(s1, s2):
   for j in range(n): tbl[0,j]=j
   for i in range(1, m):
    for j in range(1, n):
-     cost = 0 if s1[i-1] == s2[j-1] else 1
+     cost = 0.0 if s1[i-1] == s2[j-1] else 1
      tbl[i,j] = min(tbl[i, j-1]+1, tbl[i-1, j]+1, tbl[i-1, j-1]+cost)
 
   return tbl[i,j]
 
 def string_compare(s1, s2):
-  return pow(edit_distance(s1,s2)/(len(s1) + len(s2)), 2)
+  return pow(edit_distance(s1,s2)/(len(s1) + len(s2)) + 0.0, 2)
 
 def percent_difference(i1, i2):
   i1 = abs(i1)
