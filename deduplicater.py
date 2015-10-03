@@ -15,7 +15,7 @@ def all_data(dataset):
   
 def all_predicates(dataset):
   sparql.setQuery("""
-    select count(distinct ?p)
+    select distinct ?p
     from %s
     where {
       ?s ?p ?o 
