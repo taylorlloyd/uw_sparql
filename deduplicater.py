@@ -14,6 +14,16 @@ def all_data(dataset):
   sparql.setReturnFormat(JSON)
   return sparql.query().convert()
 
+def all_data_for_subj(dataset, subject):
+  sparql.setQuery("""
+    select ?p ?o
+    from %s
+    where {
+      <%s> ?p ?o
+    }""" % (dataset, subject))
+  sparql.setReturnFormat(JSON)
+  return sparql.query().convert()
+
 def all_data_for_pred(dataset, predicate):
   sparql.setQuery("""
     select ?s ?o
@@ -38,7 +48,7 @@ def all_predicates(dataset):
 data = all_predicates(dataset)
 preds = map((lambda r: r['p']['value']), data['results']['bindings'])
 
-print('%d predicates found.' % len(preds))
+#print('%d predicates found.' % len(preds))
 
 for p in preds:
     pdata = all_data_for_pred(dataset, p)
@@ -64,5 +74,6 @@ for p in preds:
           print("  bucket %d: %d entries" % (i, size))
 
 
-
-
+#subject_data = all_data_for_pred(dataset, preds[0])
+#subjects = map((lambda r: r['s']['value']), subject_data['results']['bindings'])
+#print all_data_for_subj(dataset, subjects[0])
