@@ -95,7 +95,11 @@ def entry_compare(e1, e2):
    
 
 def compare(a,b):
-  return False
+  keys = set(a.values() + b.values())
+  for key in keys:
+    if key in a and key in b:
+      return entry_compare(a[key],b[key]) <= 0.05
+
 
 
 #--------------QUERY CODE------------------------
