@@ -68,7 +68,7 @@ def is_date(s):
  
 
 def entry_compare(e1, e2):
-  if len(e2 < e1):
+  if len(e2) < len(e1):
     return entry_compare(e2, e1)
 
   entry_sum = 0.0
@@ -95,10 +95,14 @@ def entry_compare(e1, e2):
    
 
 def compare(a,b):
-  keys = set(a.values() + b.values())
+  keys = set(a.keys() + b.keys())
+  compsum = 0.0
+  count = 0.0
   for key in keys:
     if key in a and key in b:
-      return entry_compare(a[key],b[key]) <= 0.05
+      compsum += entry_compare(a[key],b[key]) <= 0.05
+      count += 1
+  return compsum / count
 
 
 
