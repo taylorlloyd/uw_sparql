@@ -14,15 +14,35 @@ def all_data(dataset):
   sparql.setReturnFormat(JSON)
   return sparql.query().convert()
 
-def all_data_for_subj(dataset, subject):
-  sparql.setQuery("""
-    select ?p ?o
+def all_data_for_subjects(dataset, subjects):
+  joined = '<' + '>,<'.join(subjects) + '>';
+  query = """
+    select ?s ?p ?o
     from %s
     where {
-      <%s> ?p ?o
-    }""" % (dataset, subject))
+      ?s ?p ?o
+      filter(?s in (%s))
+    }""" % (dataset, joined)
+  sparql.setQuery(query)
   sparql.setReturnFormat(JSON)
-  return sparql.query().convert()
+  response = sparql.query().convert()
+
+  subjects = {}
+  for e in response['results']['bindings']:
+    s = e['s']['value']
+    p = e['p']['value']
+    o = e['o']['value']
+    if s not in subjects:
+      subjects[s] = {}
+
+    if p in subjects[s]:
+      if type(subjects[s][p]) is not list:
+        subjects[s][p] = [subjects[s][p]]
+      subjects[s][p].append(o)
+    else:
+      subjects[s][p] = o
+  return subjects
+
 
 def all_data_for_pred(dataset, predicate):
   sparql.setQuery("""
@@ -32,7 +52,7 @@ def all_data_for_pred(dataset, predicate):
       ?s <%s> ?o
     }""" % (dataset, predicate))
   sparql.setReturnFormat(JSON)
-  return sparql.query().convert()
+  return sparql.query().convert()['results']['bindings']
 
 def all_predicates(dataset):
   sparql.setQuery("""
@@ -42,22 +62,30 @@ def all_predicates(dataset):
       ?s ?p ?o
     }""" % dataset)
   sparql.setReturnFormat(JSON)
-  return sparql.query().convert()
+  data = sparql.query().convert()
+  return map((lambda r: r['p']['value']), data['results']['bindings'])
+
+def pairwise_cmp(subjects):
+  for s1 in subjects:
+    for s2 in subjects:
+      if compare(subjects[s1], subjects[s2]):
+        print("Duplicate: %s and %s" % (s1, s2))
+
+def compare(a, b):
+  return False
 
 # Begin by retrieving all available predicates
-data = all_predicates(dataset)
-preds = map((lambda r: r['p']['value']), data['results']['bindings'])
-
-#print('%d predicates found.' % len(preds))
+preds = all_predicates(dataset)
+print('%d predicates found.' % len(preds))
 
 for p in preds:
     pdata = all_data_for_pred(dataset, p)
-    print('Predicate %s: %d entries' % (p, len(pdata['results']['bindings'])))
-    max_bucket_size = sqrt(len(pdata['results']['bindings']))
+    print('Predicate %s: %d entries' % (p, len(pdata)))
+    max_bucket_size = sqrt(len(pdata))
     buckets = {}
 
     # Sort entries into hashed buckets
-    for d in pdata['results']['bindings']:
+    for d in pdata:
         subject = d['s']['value']
         obj = d['o']['value']
         h = hash(obj)
@@ -72,8 +100,6 @@ for p in preds:
         size = len(buckets[val])
         if(size > 1 and size < max_bucket_size):
           print("  bucket %d: %d entries" % (i, size))
+          bucket = all_data_for_subjects(dataset, buckets[val])
+          pairwise_cmp(bucket)
 
-
-#subject_data = all_data_for_pred(dataset, preds[0])
-#subjects = map((lambda r: r['s']['value']), subject_data['results']['bindings'])
-#print all_data_for_subj(dataset, subjects[0])
