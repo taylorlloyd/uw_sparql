@@ -23,8 +23,12 @@ def edit_distance(s1, s2):
 
 def string_compare(s1, s2):
   return pow(9edit_distance(s1,s2)/(len(s1) + len(s2)), 2)
-  
 
+def percent_difference(i1, i2):
+  return abs(2*(i1 - i2)/(i1 + i2))
+
+def int_compare(i1, i2):
+  return min(percent_difference(i1,i2), string_compare(str(i1),str(i2)))
 
 
 
