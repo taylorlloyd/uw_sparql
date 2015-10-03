@@ -1,1 +1,2 @@
 SPARQLwrapper==1.6.4
+jellyfish==0.1.2

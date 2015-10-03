@@ -135,7 +135,7 @@ def all_data_for_subjects(dataset, subjects):
         subjects[s][p] = [subjects[s][p]]
       subjects[s][p].append(o)
     else:
-      subjects[s][p] = o
+      subjects[s][p] = [o]
   return subjects
 
 
