@@ -1,7 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 sparql = SPARQLWrapper('http://husky-big.cs.uwaterloo.ca:8890/sparql')
-dataset = 'http://data.nytimes.com/'
+dataset = '<http://data.nytimes.com/>'
 
 def all_data(dataset):
   sparql.setQuery("""
@@ -24,5 +24,5 @@ def all_predicates(dataset):
   return sparql.query().convert()
 
 
-data = acquire_data(dataset)
+data = all_data(dataset)
 
