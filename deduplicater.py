@@ -41,7 +41,7 @@ def parse_date(d):
 def date_difference(day1, day2):
   y1, m1, d1 = parse_date(day1)
   y2, m2, d2 = parse_date(day2)
- 
+
   if(abs(y1-y2) > 1):
     return 1
 
@@ -51,7 +51,7 @@ def date_difference(day1, day2):
     return ((366 - months[m2 - 1] - d2) + months[m1 - 1] + d1)/366.0
   elif(y2 > y1):
     return ((366 - months[m1 - 1] - d1) + months[m2 - 1] + d2)/366.0
-  
+
 
 def date_compare(d1, d2):
   return min(string_compare(d1,d2), date_difference(d1,d2))
@@ -68,8 +68,8 @@ def is_date(s):
       if not s[i].isdigit():
         return False
   return True
-      
- 
+
+
 
 def entry_compare(e1, e2):
   if len(e2) < len(e1):
@@ -95,8 +95,8 @@ def entry_compare(e1, e2):
         comp = string_compare(etr, etr2)
         best = min(comp, best)
     entry_sum += best
-  return entry_sum 
-   
+  return entry_sum
+
 
 def compare(a,b):
   keys = set(a.keys() + b.keys())
@@ -179,8 +179,9 @@ def all_predicates(dataset):
   return map((lambda r: r['p']['value']), data['results']['bindings'])
 
 def pairwise_cmp(subjects):
-  for s1 in subjects:
-    for s2 in subjects:
+  keys = subjects.keys();
+  for i, s1 in enumerate(keys):
+    for s2 in keys[i+1:]:
       if compare(subjects[s1], subjects[s2]):
         print("Duplicate: %s and %s" % (s1, s2))
 
